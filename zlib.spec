@@ -1,7 +1,7 @@
 Summary: The zlib compression and decompression library
 Name: zlib
 Version: 1.2.3
-Release: 27%{?dist}
+Release: 29%{?dist}
 Group: System Environment/Libraries
 Source: http://www.zlib.net/zlib-%{version}.tar.gz
 Source1: zlib.pc.in
@@ -9,6 +9,10 @@ Patch3: zlib-1.2.3-autotools.patch
 Patch6: minizip-1.2.3-malloc.patch
 Patch7: zlib-1.2.3-pc_file.patch
 Patch8: zlib-1.2.3-622779.patch
+# resolves: #823007
+Patch9: zlib-1.2.3-optimized-s390.patch
+# resolves: #754694
+Patch10: zlib-1.2.3-map-file.patch
 URL: http://www.gzip.org/zlib/
 # /contrib/dotzlib/ have Boost license
 License: zlib and Boost
@@ -66,6 +70,10 @@ mkdir m4
 %patch6 -p1 -b .mal
 %patch7 -p1 -b .pc
 %patch8 -p1 -b .622779
+%ifarch s390 s390x
+%patch9 -p1 -b .optimized-deflate
+%endif
+%patch10 -p1 -b .map-file
 iconv -f windows-1252 -t utf-8 <ChangeLog >ChangeLog.tmp
 mv ChangeLog.tmp ChangeLog
 cp Makefile Makefile.old
@@ -138,6 +146,16 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_libdir}/pkgconfig/minizip.pc
 
 %changelog
+* Wed Oct  3 2012 Peter Schiffer <pschiffe@redhat.com> - 1.2.3-29
+- related: #754694
+  updated zlib.map file to not hide (local) ABI symbols
+
+* Wed Oct  3 2012 Peter Schiffer <pschiffe@redhat.com> - 1.2.3-28
+- resolves: #823007
+  optimized deflate function on s390(x)
+- resolves: #754694
+  added zlib.map file to provide better version information
+
 * Wed Aug 10 2011 Peter Schiffer <pschiffe@redhat.com> - 1.2.3-27
 - Resolves: #727288
   recompiled with -Wl,-z,relro flags
