@@ -1,7 +1,7 @@
 Summary: The zlib compression and decompression library
 Name: zlib
 Version: 1.2.3
-Release: 26%{?dist}
+Release: 27%{?dist}
 Group: System Environment/Libraries
 Source: http://www.zlib.net/zlib-%{version}.tar.gz
 Source1: zlib.pc.in
@@ -72,6 +72,7 @@ cp Makefile Makefile.old
 cp %{SOURCE1} ./
 
 %build
+export LDFLAGS="$LDFLAGS -Wl,-z,relro"
 autoreconf --install;
 %configure
 make %{?_smp_mflags}
@@ -137,6 +138,10 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_libdir}/pkgconfig/minizip.pc
 
 %changelog
+* Wed Aug 10 2011 Peter Schiffer <pschiffe@redhat.com> - 1.2.3-27
+- Resolves: #727288
+  recompiled with -Wl,-z,relro flags
+
 * Mon Jun 27 2011 Ivana Hutarova Varekova <varekova@redhat.com> - 1.2.3-26
 - Resolves: #622781
   zlib has fence-post error in adler32_combine
