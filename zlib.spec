@@ -1,13 +1,14 @@
 Summary: The zlib compression and decompression library
 Name: zlib
 Version: 1.2.3
-Release: 25%{?dist}
+Release: 26%{?dist}
 Group: System Environment/Libraries
 Source: http://www.zlib.net/zlib-%{version}.tar.gz
 Source1: zlib.pc.in
 Patch3: zlib-1.2.3-autotools.patch
 Patch6: minizip-1.2.3-malloc.patch
 Patch7: zlib-1.2.3-pc_file.patch
+Patch8: zlib-1.2.3-622779.patch
 URL: http://www.gzip.org/zlib/
 # /contrib/dotzlib/ have Boost license
 License: zlib and Boost
@@ -64,6 +65,7 @@ developing applications which use minizip.
 mkdir m4
 %patch6 -p1 -b .mal
 %patch7 -p1 -b .pc
+%patch8 -p1 -b .622779
 iconv -f windows-1252 -t utf-8 <ChangeLog >ChangeLog.tmp
 mv ChangeLog.tmp ChangeLog
 cp Makefile Makefile.old
@@ -135,6 +137,10 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_libdir}/pkgconfig/minizip.pc
 
 %changelog
+* Mon Jun 27 2011 Ivana Hutarova Varekova <varekova@redhat.com> - 1.2.3-26
+- Resolves: #622781
+  zlib has fence-post error in adler32_combine
+
 * Tue Jun  1 2010 Ivana Hutarova Varekova <varekova@redhat.com> - 1.2.3-25
 - Resolves: #597954
   add zlib .pc file

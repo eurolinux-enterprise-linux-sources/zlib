@@ -1,0 +1,17 @@
+diff -up zlib-1.2.3/adler32.c.pom zlib-1.2.3/adler32.c
+--- zlib-1.2.3/adler32.c.pom	2004-12-21 11:52:08.000000000 -0500
++++ zlib-1.2.3/adler32.c	2011-03-16 08:49:54.000000000 -0400
+@@ -141,9 +141,9 @@ uLong ZEXPORT adler32_combine(adler1, ad
+     MOD(sum2);
+     sum1 += (adler2 & 0xffff) + BASE - 1;
+     sum2 += ((adler1 >> 16) & 0xffff) + ((adler2 >> 16) & 0xffff) + BASE - rem;
+-    if (sum1 > BASE) sum1 -= BASE;
+-    if (sum1 > BASE) sum1 -= BASE;
+-    if (sum2 > (BASE << 1)) sum2 -= (BASE << 1);
+-    if (sum2 > BASE) sum2 -= BASE;
++    if (sum1 >= BASE) sum1 -= BASE;
++    if (sum1 >= BASE) sum1 -= BASE;
++    if (sum2 >= (BASE << 1)) sum2 -= (BASE << 1);
++    if (sum2 >= BASE) sum2 -= BASE;
+     return sum1 | (sum2 << 16);
+ }
