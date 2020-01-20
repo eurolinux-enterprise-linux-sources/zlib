@@ -1,7 +1,7 @@
 Summary: The compression and decompression library
 Name: zlib
 Version: 1.2.7
-Release: 10%{?dist}
+Release: 13%{?dist}
 # /contrib/dotzlib/ have Boost license
 License: zlib and Boost
 Group: System Environment/Libraries
@@ -70,7 +70,11 @@ iconv -f iso-8859-2 -t utf-8 < ChangeLog > ChangeLog.tmp
 mv ChangeLog.tmp ChangeLog
 
 %build
+%ifarch ppc64
+export CFLAGS="$RPM_OPT_FLAGS -O3"
+%else
 export CFLAGS="$RPM_OPT_FLAGS"
+%endif
 export LDFLAGS="$LDFLAGS -Wl,-z,relro"
 ./configure --libdir=%{_libdir} --includedir=%{_includedir} --prefix=%{_prefix}
 make %{?_smp_mflags}
@@ -126,6 +130,16 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 %{_libdir}/pkgconfig/minizip.pc
 
 %changelog
+* Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 1.2.7-13
+- Mass rebuild 2014-01-24
+
+* Fri Jan 10 2014 Peter Schiffer <pschiffe@redhat.com> - 1.2.7-12
+- resolves: #1051079
+  recompiled with -O3 flag for ppc64 arch
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 1.2.7-11
+- Mass rebuild 2013-12-27
+
 * Fri Feb 15 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.2.7-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
 
@@ -247,7 +261,7 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 * Fri Mar  9 2007 Ivana Varekova <varekova@redhat.com> - 1.2.3-9
 - incorporate package review feedback
 
-* Tue Feb 21 2007 Adam Tkac <atkac redhat com> - 1.2.3-8
+* Wed Feb 21 2007 Adam Tkac <atkac redhat com> - 1.2.3-8
 - fixed broken version of libz
 
 * Tue Feb 20 2007 Adam Tkac <atkac redhat com> - 1.2.3-7
