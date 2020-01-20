@@ -1,7 +1,7 @@
 Summary: The compression and decompression library
 Name: zlib
 Version: 1.2.7
-Release: 13%{?dist}
+Release: 15%{?dist}
 # /contrib/dotzlib/ have Boost license
 License: zlib and Boost
 Group: System Environment/Libraries
@@ -70,11 +70,12 @@ iconv -f iso-8859-2 -t utf-8 < ChangeLog > ChangeLog.tmp
 mv ChangeLog.tmp ChangeLog
 
 %build
-%ifarch ppc64
+%ifarch ppc64 ppc64le
 export CFLAGS="$RPM_OPT_FLAGS -O3"
 %else
 export CFLAGS="$RPM_OPT_FLAGS"
 %endif
+
 export LDFLAGS="$LDFLAGS -Wl,-z,relro"
 ./configure --libdir=%{_libdir} --includedir=%{_includedir} --prefix=%{_prefix}
 make %{?_smp_mflags}
@@ -130,6 +131,13 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 %{_libdir}/pkgconfig/minizip.pc
 
 %changelog
+* Tue May 12 2015 Peter Robinson <pbrobinson@redhat.com> 1.2.7-15
+- Rebuild for rhbz #1123500
+
+* Thu Jul 31 2014 jchaloup <jchaloup@redhat.com> - 1.2.7-14
+- resolves: #1123500
+  recompiled with -O3 flag for ppc64le arch
+
 * Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 1.2.7-13
 - Mass rebuild 2014-01-24
 
