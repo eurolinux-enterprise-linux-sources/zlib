@@ -1,7 +1,7 @@
 Summary: The compression and decompression library
 Name: zlib
 Version: 1.2.7
-Release: 17%{?dist}
+Release: 18%{?dist}
 # /contrib/dotzlib/ have Boost license
 License: zlib and Boost
 Group: System Environment/Libraries
@@ -83,7 +83,7 @@ export CFLAGS="$RPM_OPT_FLAGS -O3"
 export CFLAGS="$RPM_OPT_FLAGS"
 %endif
 
-export LDFLAGS="$LDFLAGS -Wl,-z,relro"
+export LDFLAGS="$LDFLAGS -Wl,-z,relro -Wl,-z,now"
 ./configure --libdir=%{_libdir} --includedir=%{_includedir} --prefix=%{_prefix}
 make %{?_smp_mflags}
 
@@ -138,6 +138,9 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 %{_libdir}/pkgconfig/minizip.pc
 
 %changelog
+* Mon Jul 09 2018 Pavel Raiskup <praiskup@redhat.com> - 1.2.7-18
+- Link with -z now for full RELRO
+
 * Thu May 19 2016 jchaloup <jchaloup@redhat.com> - 1.2.7-17
 - Fix writing empty files on gzopen()/gzclose()
   resolves: #1337441
