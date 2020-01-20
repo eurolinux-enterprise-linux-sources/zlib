@@ -1,7 +1,7 @@
 Summary: The compression and decompression library
 Name: zlib
 Version: 1.2.7
-Release: 15%{?dist}
+Release: 17%{?dist}
 # /contrib/dotzlib/ have Boost license
 License: zlib and Boost
 Group: System Environment/Libraries
@@ -13,6 +13,10 @@ Patch0: zlib-1.2.5-minizip-fixuncrypt.patch
 Patch1: zlib-1.2.7-optimized-s390.patch
 # resolves: #844791
 Patch2: zlib-1.2.7-z-block-flush.patch
+# resolves: #1127330
+Patch3: zlib-1.2.7-fix-serious-but-very-rare-decompression-bug-in-inftr.patch
+# resolves: #1337441
+Patch4: zlib-1.2.7-Fix-bug-where-gzopen-gzclose-would-write-an-empty-fi.patch
 
 BuildRequires: automake, autoconf, libtool
 
@@ -68,6 +72,9 @@ developing applications which use minizip.
 %patch2 -p1 -b .z-flush
 iconv -f iso-8859-2 -t utf-8 < ChangeLog > ChangeLog.tmp
 mv ChangeLog.tmp ChangeLog
+
+%patch3 -p1
+%patch4 -p1
 
 %build
 %ifarch ppc64 ppc64le
@@ -131,6 +138,14 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 %{_libdir}/pkgconfig/minizip.pc
 
 %changelog
+* Thu May 19 2016 jchaloup <jchaloup@redhat.com> - 1.2.7-17
+- Fix writing empty files on gzopen()/gzclose()
+  resolves: #1337441
+
+* Wed Apr 27 2016 jchaloup <jchaloup@redhat.com> - 1.2.7-16
+- Fix serious but very rare decompression bug in inftrees.c (upstream patch)
+  resolves: #1127330
+
 * Tue May 12 2015 Peter Robinson <pbrobinson@redhat.com> 1.2.7-15
 - Rebuild for rhbz #1123500
 
